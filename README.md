@@ -29,8 +29,8 @@ Express + MongoDB backend for LASA, modeled after CMV with a simplified feature 
 ## Event Behavior
 
 - Events are a single collection.
-- Current-year events show on the Events page.
-- Any event from prior years appears under Archived.
+- Events with `startDate` today or in the future show on the Events page.
+- Events with `startDate` before today appear under Archived automatically.
 - Event end date is auto-set to Dec 31 of the start year.
 - `startDate` must be sent as `YYYY-MM-DD` (date only).
 - Event dates are stored as plain date strings (`YYYY-MM-DD`), not timestamps.

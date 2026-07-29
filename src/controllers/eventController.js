@@ -3,7 +3,6 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const {
   normalizeDateOnlyString,
   getCurrentUTCDateString,
-  getCurrentUTCYear,
   getYearFromDateOnlyString,
   getYearEndDateString
 } = require("../utils/dateUtils");
@@ -11,31 +10,27 @@ const { generateFlyerImages } = require("../services/flyerService");
 const { uploadPublicObject } = require("../services/s3Service");
 
 const listCurrentYearEvents = asyncHandler(async (req, res) => {
-  const currentYear = getCurrentUTCYear();
+  const today = getCurrentUTCDateString();
 
-  const events = await Event.find({ eventYear: currentYear })
-    .sort({ startDate: -1 });
+  const events = await Event.find({ startDate: { $gte: today } })
+    .sort({ startDate: 1 });
 
   return res.json({ events });
 });
 
 const listArchivedEvents = asyncHandler(async (req, res) => {
-  const currentYear = getCurrentUTCYear();
+  const today = getCurrentUTCDateString();
 
-  const events = await Event.find({ eventYear: { $lt: currentYear } })
+  const events = await Event.find({ startDate: { $lt: today } })
     .sort({ startDate: -1 });
 
   return res.json({ events });
 });
 
 const listActiveEvents = asyncHandler(async (req, res) => {
-  const currentYear = getCurrentUTCYear();
   const today = getCurrentUTCDateString();
 
-  const events = await Event.find({
-    eventYear: currentYear,
-    startDate: { $gte: today }
-  })
+  const events = await Event.find({ startDate: { $gte: today } })
     .sort({ startDate: 1 });
 
   return res.json({ events });

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const {
   isDateOnlyString,
   normalizeDateOnlyString,
-  getCurrentUTCYear,
+  getCurrentUTCDateString,
   getYearFromDateOnlyString,
   getYearEndDateString
 } = require("../utils/dateUtils");
@@ -63,8 +63,7 @@ eventSchema.pre("validate", function setDerivedDates(next) {
 });
 
 eventSchema.virtual("isArchived").get(function isArchived() {
-  const currentYear = getCurrentUTCYear();
-  return this.eventYear < currentYear;
+  return this.startDate < getCurrentUTCDateString();
 });
 
 eventSchema.set("toJSON", {
