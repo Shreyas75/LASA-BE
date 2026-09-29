@@ -25,7 +25,6 @@ const createPresignedUploadUrl = async ({ key, contentType }) => {
     Bucket: env.AWS_S3_BUCKET,
     Key: key,
     ContentType: contentType,
-    ACL: "public-read"
   });
 
   const uploadUrl = await getSignedUrl(s3Client, command, { expiresIn: 300 });
@@ -40,7 +39,6 @@ const uploadPublicObject = async ({ key, body, contentType }) => {
     Key: key,
     Body: body,
     ContentType: contentType,
-    ACL: "public-read"
   });
 
   await s3Client.send(command);
